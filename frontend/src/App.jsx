@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-
+import './App.css';
+import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Tickets from './pages/Tickets';
 import TicketDetail from './pages/TicketDetail';
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(
     !!localStorage.getItem('token')
@@ -12,11 +14,15 @@ function App() {
 
   const [tickets, setTickets] = useState([]);
 
-  const fetchTickets = async () => {
+  const fetchTickets = async (
+    search = '',
+    status = '',
+    priority = ''
+  ) => {
     const token = localStorage.getItem('token');
 
     const response = await fetch(
-      'http://127.0.0.1:8000/api/tickets/',
+      `http://127.0.0.1:8000/api/tickets/?search=${search}&status=${status}&priority=${priority}`,
       {
         headers: {
           Authorization: 'Token ' + token,
@@ -71,15 +77,25 @@ function App() {
   return (
     <Routes>
       <Route
-        path="/login"
-        element={
-          isLoggedIn ? (
-            <Navigate to="/tickets" />
-          ) : (
-            <Login onLogin={handleLogin} />
-          )
-        }
-      />
+  path="/login"
+  element={
+    isLoggedIn ? (
+      <Navigate to="/dashboard" />
+    ) : (
+      <Login onLogin={handleLogin} />
+    )
+  }
+/>
+      <Route
+  path="/dashboard"
+  element={
+    isLoggedIn ? (
+      <Dashboard onLogout={handleLogout} />
+    ) : (
+      <Navigate to="/login" />
+    )
+  }
+/>
 
       <Route
         path="/register"
@@ -100,6 +116,7 @@ function App() {
               tickets={tickets}
               onCreateTicket={handleCreateTicket}
               onLogout={handleLogout}
+              onSearch={fetchTickets}
             />
           ) : (
             <Navigate to="/login" />
@@ -122,7 +139,7 @@ function App() {
         path="*"
         element={
           <Navigate
-            to={isLoggedIn ? '/tickets' : '/login'}
+            to={isLoggedIn ? '/dashboard' : '/login'}
           />
         }
       />
@@ -131,3 +148,4 @@ function App() {
 }
 
 export default App;
+

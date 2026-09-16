@@ -1,10 +1,14 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function Tickets({ tickets, onCreateTicket, onLogout }) {
+function Tickets({ tickets, onCreateTicket, onLogout, onSearch }) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [priority, setPriority] = useState('MEDIUM');
+
+  const [search, setSearch] = useState('');
+  const [status, setStatus] = useState('');
+  const [priorityFilter, setPriorityFilter] = useState('');
 
   const navigate = useNavigate();
 
@@ -22,13 +26,35 @@ function Tickets({ tickets, onCreateTicket, onLogout }) {
     }
   };
 
+  const handleSearch = (e) => {
+    const value = e.target.value;
+
+    setSearch(value);
+    onSearch(value, status, priorityFilter);
+  };
+
+  const handleStatusFilter = (e) => {
+    const value = e.target.value;
+
+    setStatus(value);
+    onSearch(search, value, priorityFilter);
+  };
+
+  const handlePriorityFilter = (e) => {
+    const value = e.target.value;
+
+    setPriorityFilter(value);
+    onSearch(search, status, value);
+  };
+
   const handleLogout = () => {
     onLogout();
     navigate('/login');
   };
 
   return (
-    <div>
+    <div className="tickets-page">
+
       <h1>Tickets</h1>
 
       <h3>Create New Ticket</h3>
@@ -56,7 +82,7 @@ function Tickets({ tickets, onCreateTicket, onLogout }) {
       >
         <option value="LOW">Low</option>
         <option value="MEDIUM">Medium</option>
-        <option value="HIGH">High</option>
+        <option value="high">High</option>
       </select>
 
       <br />
@@ -71,6 +97,39 @@ function Tickets({ tickets, onCreateTicket, onLogout }) {
       <button onClick={handleLogout}>
         Logout
       </button>
+
+      <h3>Search Tickets</h3>
+
+      <input
+        type="text"
+        placeholder="Search by title..."
+        value={search}
+        onChange={handleSearch}
+      />
+
+      <h3>Filter by Status</h3>
+
+      <select
+        value={status}
+        onChange={handleStatusFilter}
+      >
+        <option value="">All Status</option>
+        <option value="OPEN">Open</option>
+        <option value="IN PROGRESS">In Progress</option>
+        <option value="CLOSED">Closed</option>
+      </select>
+
+      <h3>Filter by Priority</h3>
+
+      <select
+        value={priorityFilter}
+        onChange={handlePriorityFilter}
+      >
+        <option value="">All Priority</option>
+        <option value="LOW">Low</option>
+        <option value="MEDIUM">Medium</option>
+        <option value="high">High</option>
+      </select>
 
       <h3>All Tickets</h3>
 
@@ -90,3 +149,4 @@ function Tickets({ tickets, onCreateTicket, onLogout }) {
 }
 
 export default Tickets;
+

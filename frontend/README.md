@@ -68,7 +68,7 @@ class Comment(models.Model):
 
 ---
 
-## Phase 3 + 4: Frontend — React + API Integration (in progress)
+## Phase 3 + 4: Frontend — React + API Integration (Completed)
 
 **Setup:**
 - Node.js installed, React project scaffolded with Vite (`npm create vite@latest helpdesk_frontend -- --template react`) in a sibling folder to the backend

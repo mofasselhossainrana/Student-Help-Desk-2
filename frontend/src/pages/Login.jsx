@@ -10,13 +10,16 @@ function Login({ onLogin }) {
 
   const handleLogin = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/login/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),
-      });
+      const response = await fetch(
+        'http://127.0.0.1:8000/api/login/',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ username, password }),
+        }
+      );
 
       const data = await response.json();
 
@@ -24,7 +27,7 @@ function Login({ onLogin }) {
         localStorage.setItem('token', data.token);
         setMessage('Login successful!');
         onLogin();
-        navigate('/tickets');
+        navigate('/dashboard');
       } else {
         setMessage('Login failed. Check username/password.');
       }
@@ -35,36 +38,90 @@ function Login({ onLogin }) {
   };
 
   return (
-    <div>
-      <h1>Student Help Desk - Login</h1>
+    <div className="login-page">
 
-      <input
-        type="text"
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
+      <div className="login-container">
 
-      <br />
+        {/* Left Side - Illustration */}
+        <div className="login-visual">
+          <div className="visual-content">
+            <div className="visual-icon">🎓</div>
 
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
+            <h1>Student Help Desk</h1>
 
-      <br />
+            <p>
+              Get support, track your tickets,
+              and solve your problems easily.
+            </p>
 
-      <button onClick={handleLogin}>Login</button>
+            <div className="visual-card">
+              🎫
+              <span>Manage your support tickets</span>
+            </div>
 
-      <p>{message}</p>
+            <div className="visual-card">
+              💬
+              <span>Communicate with support</span>
+            </div>
+          </div>
+        </div>
 
-      <p>
-        Don't have an account? <Link to="/register">Register</Link>
-      </p>
+        {/* Right Side - Login Form */}
+        <div className="login-form-container">
+
+          <div className="login-form">
+
+            <h2>Welcome Back 👋</h2>
+
+            <p className="login-subtitle">
+              Login to your student account
+            </p>
+
+            <label>Username</label>
+
+            <input
+              type="text"
+              placeholder="Enter your username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+
+            <label>Password</label>
+
+            <input
+              type="password"
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+
+            <button
+              className="login-button"
+              onClick={handleLogin}
+            >
+              Login
+            </button>
+
+            {message && (
+              <p className="login-message">
+                {message}
+              </p>
+            )}
+
+            <p className="register-text">
+              Don't have an account?{' '}
+              <Link to="/register">Create an account</Link>
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
     </div>
   );
 }
 
 export default Login;
+
