@@ -10,14 +10,14 @@ function Sidebar({ onLogout }) {
 
   return (
     <aside className="sidebar">
-
       <div className="sidebar-logo">
-        🎓
-        <span>Student Help Desk</span>
+        <img
+          src="/download.svg"
+          alt="Student Help Desk"
+        />
       </div>
 
       <nav className="sidebar-nav">
-
         <NavLink to="/dashboard">
           🏠 Dashboard
         </NavLink>
@@ -33,17 +33,13 @@ function Sidebar({ onLogout }) {
         <NavLink to="/search">
           🔍 Search Tickets
         </NavLink>
-
       </nav>
 
       <div className="sidebar-bottom">
-
         <button onClick={handleLogout}>
           🚪 Logout
         </button>
-
       </div>
-
     </aside>
   );
 }

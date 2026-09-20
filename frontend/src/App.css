@@ -289,4 +289,38 @@ button {
 .sidebar-bottom button:hover {
   background: #fee2e2;
 }
+.dashboard-layout {
+  min-height: 100vh;
+  background: #f6f8fc;
+}
 
+.dashboard-content {
+  margin-left: 250px;
+  padding: 40px;
+  min-height: 100vh;
+}
+
+.dashboard-content h1 {
+  margin: 0;
+  font-size: 32px;
+  color: #1e293b;
+}
+
+.dashboard-subtitle {
+  margin: 8px 0 30px;
+  color: #64748b;
+  font-size: 15px;
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.sidebar-logo img {
+  width: 150px;
+  height: auto;
+  display: block;
+}
