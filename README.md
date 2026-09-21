@@ -1,102 +1,652 @@
-# Student Mini Help Desk — Project Progress Log
+# 🎓 Student Mini Help Desk — সমাধান
 
-A full-stack help desk application built from scratch (PostgreSQL + Django REST Framework + React), documented from database design through current progress.
+A full-stack student support and help desk application built from scratch to practice and demonstrate **PostgreSQL, Django REST Framework, React, authentication, REST APIs, and modern UI/UX**.
 
----
-
-## Phase 1: Database Design (PostgreSQL / pgAdmin)
-
-Designed and built the initial schema manually in pgAdmin to learn relational database fundamentals.
-
-**Tables designed:**
-
-| Table | Fields |
-|---|---|
-| **Tickets** | id, title, description, priority, status, user_id, created_at, updated_at |
-| **Users** | id, name, email, password, role, created_at |
-| **Comments** | id, message, ticket_id, user_id, created_at |
-
-**Concepts learned along the way:**
-- Primary Key vs Foreign Key, and why a Foreign Key target column needs a unique constraint
-- `NOT NULL` columns need a default value (e.g. `now()`) or inserts fail
-- PostgreSQL is case-sensitive for quoted identifiers — mixed-case column names (`Id`, `Name`) require double-quoting in every query
+> **Project:** Student Mini Help Desk
+> **Bangla Name:** সমাধান
+> **Version:** 1.0 — Complete Project
+> **Status:** ✅ MVP Completed
 
 ---
 
-## Phase 2: Backend — Django + REST API
+## 📌 About the Project
 
-**Environment setup:**
-- Created a Python virtual environment (`venv`) in `helpdesk_backend/` on Desktop
-- Installed `django`, `djangorestframework`, `psycopg2-binary`
-- Created Django project `helpdesk_project`
-- Connected Django to the PostgreSQL database `Student Mini help desk` via `settings.py`
-- Ran initial `migrate` successfully — confirmed Django ↔ PostgreSQL connection works
+**Student Mini Help Desk** is a web-based support system designed to help students submit, track, and manage support tickets.
 
-**Models (`tickets/models.py`):**
-```python
-class Ticket(models.Model):
-    title = models.CharField(max_length=150)
-    description = models.TextField()
-    priority = models.CharField(max_length=20, default="MEDIUM")
-    status = models.CharField(max_length=20, default="OPEN")
-    user = models.ForeignKey("auth.User", on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+Students can create support tickets, check their ticket status, search and filter tickets, and communicate through comments.
 
-class Comment(models.Model):
-    content = models.TextField()
-    ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)
-    user = models.ForeignKey("auth.User", on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
+The project was developed from scratch as a practical full-stack learning project, starting from database design and gradually connecting the backend API with the React frontend.
+
+---
+
+## ✨ Features
+
+### 🔐 Authentication
+
+* User registration
+* User login
+* Token-based authentication
+* Protected API requests
+* Persistent login using `localStorage`
+* Logout functionality
+
+### 🎫 Ticket Management
+
+* Create support tickets
+* View ticket list
+* View ticket details
+* Update ticket information
+* Delete tickets
+* Ticket priority
+* Ticket status
+* User-specific ticket ownership
+
+### 💬 Comments
+
+* Add comments to tickets
+* View ticket comments
+* Authenticated comment creation
+
+### 🔎 Search & Filtering
+
+* Search tickets by title
+* Filter by status
+* Filter by priority
+* Backend-powered query filtering
+
+### 📊 Dashboard
+
+* Dashboard overview
+* Ticket statistics
+* Recent tickets
+* Navigation through reusable sidebar
+
+### 🎨 UI/UX
+
+* Modern student-support interface
+* Responsive layout
+* Login & registration screens
+* Dashboard
+* My Tickets
+* Create Ticket
+* Ticket Detail
+* Search Tickets
+* Splash screen
+* Reusable sidebar
+* Responsive mobile-friendly design
+
+---
+
+# 🛠️ Tech Stack
+
+## Frontend
+
+* React
+* Vite
+* JavaScript
+* React Router
+* CSS
+
+## Backend
+
+* Python
+* Django
+* Django REST Framework
+* Token Authentication
+* django-cors-headers
+
+## Database
+
+* PostgreSQL
+* pgAdmin
+
+## Development Tools
+
+* VS Code
+* Bruno API Client
+* Git
+* GitHub
+
+---
+
+# 🏗️ Project Architecture
+
+```text
+Student Mini Help Desk/
+│
+├── Backend/
+│   ├── helpdesk_project/
+│   ├── tickets/
+│   ├── manage.py
+│   └── venv/
+│
+├── Frontend/
+│   ├── public/
+│   ├── src/
+│   │   ├── Components/
+│   │   ├── pages/
+│   │   ├── App.jsx
+│   │   ├── App.css
+│   │   └── main.jsx
+│   └── package.json
+│
+├── Bruno Collections/
+│
+└── .gitignore
 ```
 
-**Design decision:** Used Django's built-in `auth.User` model rather than a custom user table (since migrations were already applied against it). A separate `role`-holding profile model was deferred to the Authentication phase rather than reworked immediately.
+---
 
-**Serializers, Views, URLs:**
-- `TicketSerializer`, `CommentSerializer` (DRF `ModelSerializer`)
-- `TicketListCreateView`, `TicketDetailView`, `CommentListCreateView` (DRF generic views)
-- Routes: `/api/tickets/`, `/api/tickets/<pk>/`, `/api/comments/`
-- Tested via DRF's browsable API — GET and POST both confirmed working
+# 🗄️ Database Design
 
-**Authentication:**
-- `UserRegistrationView` — registers new users via `User.objects.create_user()` (ensures passwords are hashed, never stored in plain text)
-- Login via DRF's built-in `obtain_auth_token` → returns a Token on successful login
-- All Ticket/Comment endpoints protected with `permission_classes = [IsAuthenticated]`
-- **Bug fixed:** Ticket/Comment creation initially required manually supplying a `user` id. Fixed by marking `user` as `read_only` in the serializers and overriding `perform_create()` in the views to auto-assign `user=self.request.user` — so the logged-in user is attached automatically and securely.
+The initial database was designed manually in PostgreSQL/pgAdmin before connecting it with Django.
 
-**Phase 2 status: ✅ Complete** — Models, Serializers, Views, Endpoints, Registration, Login/Token Auth, and Protected API all working.
+### Main Entities
+
+```text
+Users
+  │
+  ├────────── Tickets
+  │              │
+  │              └──────── Comments
+  │
+  └────────── Comments
+```
+
+### Users
+
+| Field      | Description           |
+| ---------- | --------------------- |
+| id         | Primary Key           |
+| name       | User name             |
+| email      | Unique email          |
+| password   | User password         |
+| role       | User role             |
+| created_at | Account creation time |
+
+### Tickets
+
+| Field       | Description         |
+| ----------- | ------------------- |
+| id          | Primary Key         |
+| title       | Ticket title        |
+| description | Problem description |
+| priority    | Ticket priority     |
+| status      | Ticket status       |
+| user_id     | Foreign Key → User  |
+| created_at  | Creation time       |
+| updated_at  | Last update time    |
+
+### Comments
+
+| Field      | Description          |
+| ---------- | -------------------- |
+| id         | Primary Key          |
+| content    | Comment message      |
+| ticket_id  | Foreign Key → Ticket |
+| user_id    | Foreign Key → User   |
+| created_at | Creation time        |
 
 ---
 
-## Phase 3 + 4: Frontend — React + API Integration (Completed)
+# 🔌 API Endpoints
 
-**Setup:**
-- Node.js installed, React project scaffolded with Vite (`npm create vite@latest helpdesk_frontend -- --template react`) in a sibling folder to the backend
-- CORS configured on the Django side (`django-cors-headers`) to allow requests from `http://localhost:5173`
+## Authentication
 
-**Built so far (all in a single `App.jsx`, no routing yet):**
-- **Login form** — calls `/api/login/`, saves the returned token to `localStorage`
-- **Auto-login** — on page load, `useEffect` checks `localStorage` for an existing token and skips straight to the ticket list if found
-- **Ticket List view** — fetches `/api/tickets/` with the token in the `Authorization` header, renders the list
-- **Create Ticket form** — posts new tickets (title, description, priority) to `/api/tickets/`
-- **Ticket Detail view** — clicking a ticket switches to a detail view showing full ticket info
-- **Comments** — detail view fetches comments and filters client-side for the selected ticket; includes a form to add new comments
+### Register
 
-**Remaining Phase 3+4 work:**
-- [ ] Register page (currently only testable via the Django browsable API)
-- [ ] Logout button
-- [ ] Proper navigation/routing (currently uses a simple `view` state toggle instead of real routes)
+```http
+POST /api/register/
+```
 
-**Deferred to after Phase 3+4 is functionally complete:** CSS styling / visual polish (decision: styling comes after functionality, not before).
+### Login
+
+```http
+POST /api/login/
+```
 
 ---
 
-## Phase 5: Not yet started
+## Tickets
 
-Planned scope: Search, Filter, Testing, Polish (including CSS styling).
+### List / Create Tickets
+
+```http
+GET  /api/tickets/
+POST /api/tickets/
+```
+
+### Ticket Details
+
+```http
+GET    /api/tickets/<id>/
+PUT    /api/tickets/<id>/
+PATCH  /api/tickets/<id>/
+DELETE /api/tickets/<id>/
+```
 
 ---
 
-## Timeline note
+## Search & Filtering
 
-Original plan was a single week (Mon–Fri). Deadline was deliberately extended to **the following Friday** to allow time to actually understand each concept rather than rush and copy-paste — the same 5 phases were kept, just spread over more days.
+Search:
+
+```http
+GET /api/tickets/?search=network
+```
+
+Status filter:
+
+```http
+GET /api/tickets/?status=OPEN
+```
+
+Priority filter:
+
+```http
+GET /api/tickets/?priority=HIGH
+```
+
+Search + filters can also be combined.
+
+---
+
+## Comments
+
+```http
+GET  /api/comments/
+POST /api/comments/
+```
+
+Authenticated requests use token authentication:
+
+```http
+Authorization: Token <your-token>
+```
+
+---
+
+# 🔄 Application Flow
+
+```text
+                 ┌──────────────┐
+                 │    User      │
+                 └──────┬───────┘
+                        │
+                        ▼
+                ┌───────────────┐
+                │ Login/Register│
+                └───────┬───────┘
+                        │
+                        ▼
+                 ┌────────────┐
+                 │ Dashboard  │
+                 └─────┬──────┘
+                       │
+          ┌────────────┼─────────────┐
+          ▼            ▼             ▼
+     My Tickets   Create Ticket   Search
+          │            │             │
+          └────────────┼─────────────┘
+                       ▼
+                ┌──────────────┐
+                │Ticket Detail │
+                └──────┬───────┘
+                       │
+                       ▼
+                 ┌───────────┐
+                 │ Comments  │
+                 └───────────┘
+```
+
+---
+
+# 🚀 Getting Started
+
+## 1. Clone the Repository
+
+```bash
+git clone https://github.com/mofasselhossainrana/Student-Help-Desk-2.git
+```
+
+```bash
+cd Student-Help-Desk-2
+```
+
+---
+
+# ⚙️ Backend Setup
+
+Go to the backend directory:
+
+```bash
+cd Backend
+```
+
+Create and activate the virtual environment if needed:
+
+### Windows
+
+```bash
+python -m venv venv
+```
+
+```bash
+venv\Scripts\activate
+```
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Run migrations:
+
+```bash
+python manage.py migrate
+```
+
+Start the Django development server:
+
+```bash
+python manage.py runserver
+```
+
+Backend will normally run at:
+
+```text
+http://127.0.0.1:8000/
+```
+
+---
+
+# 💻 Frontend Setup
+
+Open another terminal and go to:
+
+```bash
+cd Frontend
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Start the development server:
+
+```bash
+npm run dev
+```
+
+Vite will provide the local frontend URL in the terminal.
+
+---
+
+# 🧪 API Testing
+
+API endpoints were tested during development using **Bruno**.
+
+Testing included:
+
+* Registration
+* Login
+* Token authentication
+* Ticket creation
+* Ticket listing
+* Ticket details
+* Ticket updates
+* Ticket deletion
+* Comments
+* Search
+* Status filtering
+* Priority filtering
+* Authentication error handling
+
+---
+
+# 🌿 Git Branch Strategy
+
+The project uses separate branches for stable code and testing.
+
+```text
+main
+ │
+ │ Stable / Completed Version
+ │
+ ▼
+Testing-by-Rana
+ │
+ │ Testing & Integration
+ │
+ ▼
+feature branch
+```
+
+### Main
+
+`main` contains the stable version of the project.
+
+### Testing-by-Rana
+
+Used for testing and integrating new changes before they are merged into `main`.
+
+### Feature Branches
+
+Future features can be developed separately and then merged into the testing branch.
+
+Example:
+
+```text
+Testing-by-Rana
+       │
+       ▼
+feature/admin-panel
+       │
+       ▼
+Pull Request
+       │
+       ▼
+Testing-by-Rana
+       │
+       ▼
+Testing
+       │
+       ▼
+main
+```
+
+---
+
+# 📚 Development Phases
+
+## Phase 1 — Database Design ✅
+
+* PostgreSQL database created
+* Users table
+* Tickets table
+* Comments table
+* Primary Keys
+* Foreign Keys
+* NOT NULL
+* UNIQUE
+* DEFAULT
+* Sample data
+* Relationship testing
+
+---
+
+## Phase 2 — Django Backend & API ✅
+
+* Django project setup
+* Django REST Framework
+* PostgreSQL connection
+* Models
+* Serializers
+* API views
+* API URLs
+* Authentication
+* Protected endpoints
+* CORS configuration
+
+---
+
+## Phase 3 — React Frontend ✅
+
+* React + Vite setup
+* Routing
+* Login
+* Register
+* Dashboard
+* Ticket list
+* Create ticket
+* Ticket details
+* Sidebar
+* Logout
+
+---
+
+## Phase 4 — Comments, Search & Filters ✅
+
+* Ticket comments
+* Search
+* Status filtering
+* Priority filtering
+* API integration
+* Frontend integration
+
+---
+
+## Phase 5 — UI/UX & Final Integration ✅
+
+* Dashboard redesign
+* Responsive UI
+* Modern visual design
+* Splash screen
+* Login/Register redesign
+* Sidebar redesign
+* Ticket UI polish
+* Search UI
+* Final integration
+* Frontend/backend flow testing
+
+---
+
+# 🔮 Future Development
+
+The current version is the **MVP / Version 1**.
+
+Possible future phases include:
+
+### Phase 6 — Admin Panel
+
+* Admin authentication
+* Role-based authorization
+* Admin dashboard
+* Manage all tickets
+* Manage users
+* Manage comments
+* Change ticket status
+* Change priority
+* Admin search & filtering
+
+### Future Improvements
+
+* Email notifications
+* Real-time notifications
+* File attachments
+* Ticket categories
+* Analytics
+* Advanced reporting
+* Deployment
+* Production database
+* Better permission management
+
+---
+
+# 🎯 Learning Objectives
+
+This project was built not only as an application but also as a practical learning journey.
+
+The main goals were to understand:
+
+* Relational database design
+* PostgreSQL
+* Primary & Foreign Keys
+* Django architecture
+* REST API concepts
+* Authentication
+* API integration
+* React component architecture
+* React Router
+* Frontend state management
+* CRUD operations
+* Search and filtering
+* Git & GitHub workflow
+* Full-stack application architecture
+
+---
+
+# 🧠 What I Learned
+
+Through this project, I practiced the complete flow:
+
+```text
+Database
+   ↓
+Django Models
+   ↓
+Django REST API
+   ↓
+Authentication
+   ↓
+React Frontend
+   ↓
+API Integration
+   ↓
+UI/UX
+   ↓
+Testing
+   ↓
+Git & GitHub
+```
+
+This project helped me understand how the **frontend, backend, database, authentication, and API layers work together as one complete system.**
+
+---
+
+# 📌 Current Status
+
+| Area            | Status          |
+| --------------- | --------------- |
+| Database        | ✅ Complete      |
+| Backend         | ✅ Complete      |
+| Authentication  | ✅ Complete      |
+| React Frontend  | ✅ Complete      |
+| Ticket CRUD     | ✅ Complete      |
+| Comments        | ✅ Complete      |
+| Search          | ✅ Complete      |
+| Filters         | ✅ Complete      |
+| Dashboard       | ✅ Complete      |
+| Responsive UI   | ✅ Complete      |
+| Final UI Polish | ✅ Complete      |
+| MVP             | ✅ Complete      |
+| Admin Panel     | 🔜 Future Phase |
+
+---
+
+# 👨‍💻 Developer
+
+**Mofassel Hossain Rana**
+
+Built as a practical full-stack development project for learning, experimentation, and portfolio development.
+
+---
+
+## ⭐ Project Goal
+
+> **Learn the fundamentals. Build from scratch. Understand the system. Improve through real projects.**
+
+If you find this project useful, feel free to explore the repository and follow the development journey.
