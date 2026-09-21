@@ -2,47 +2,14 @@ import { NavLink, useNavigate } from 'react-router-dom';
 
 function Sidebar({ onLogout }) {
   const navigate = useNavigate();
+  const handleLogout = () => { onLogout(); navigate('/login'); };
+  const navigation = [['⌂', 'Dashboard', '/dashboard'], ['▤', 'My Tickets', '/tickets'], ['+', 'Create Ticket', '/create-ticket'], ['⌕', 'Search Tickets', '/search']];
 
-  const handleLogout = () => {
-    onLogout();
-    navigate('/login');
-  };
-
-  return (
-    <aside className="sidebar">
-      <div className="sidebar-logo">
-        <img
-          src="/download.svg"
-          alt="Student Help Desk"
-        />
-      </div>
-
-      <nav className="sidebar-nav">
-        <NavLink to="/dashboard">
-          🏠 Dashboard
-        </NavLink>
-
-        <NavLink to="/tickets">
-          🎫 My Tickets
-        </NavLink>
-
-        <NavLink to="/create-ticket">
-          ➕ Create Ticket
-        </NavLink>
-
-        <NavLink to="/search">
-          🔍 Search Tickets
-        </NavLink>
-      </nav>
-
-      <div className="sidebar-bottom">
-        <button onClick={handleLogout}>
-          🚪 Logout
-        </button>
-      </div>
-    </aside>
-  );
+  return <aside className="sidebar">
+    <NavLink className="brand" to="/dashboard" aria-label="StudentDesk dashboard"><img src="/studentdesk-logo.png" alt="StudentDesk" /><span><strong>StudentDesk</strong><small>Mini Help Desk</small></span></NavLink>
+    <nav className="sidebar-nav" aria-label="Main navigation">{navigation.map(([icon, label, to]) => <NavLink key={to} to={to}><span aria-hidden="true">{icon}</span>{label}</NavLink>)}</nav>
+    <div className="sidebar-bottom"><button type="button" onClick={handleLogout}><span aria-hidden="true">↪</span> Logout</button></div>
+  </aside>;
 }
 
 export default Sidebar;
-

@@ -5,123 +5,20 @@ function Login({ onLogin }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
-
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = async () => {
+  const handleLogin = async (event) => {
+    event.preventDefault(); setLoading(true); setMessage('');
     try {
-      const response = await fetch(
-        'http://127.0.0.1:8000/api/login/',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ username, password }),
-        }
-      );
-
+      const response = await fetch('http://127.0.0.1:8000/api/login/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username, password }) });
       const data = await response.json();
-
-      if (response.ok) {
-        localStorage.setItem('token', data.token);
-        setMessage('Login successful!');
-        onLogin();
-        navigate('/dashboard');
-      } else {
-        setMessage('Login failed. Check username/password.');
-      }
-    } catch (error) {
-      setMessage('Error connecting to server.');
-      console.log(error);
-    }
+      if (!response.ok) throw new Error('Login failed. Check your username and password.');
+      localStorage.setItem('token', data.token); onLogin(); navigate('/dashboard');
+    } catch (error) { setMessage(error.message || 'Error connecting to server.'); }
+    finally { setLoading(false); }
   };
 
-  return (
-    <div className="login-page">
-
-      <div className="login-container">
-
-        {/* Left Side - Illustration */}
-        <div className="login-visual">
-          <div className="visual-content">
-            <div className="visual-icon">🎓</div>
-
-            <h1>Student Help Desk</h1>
-
-            <p>
-              Get support, track your tickets,
-              and solve your problems easily.
-            </p>
-
-            <div className="visual-card">
-              🎫
-              <span>Manage your support tickets</span>
-            </div>
-
-            <div className="visual-card">
-              💬
-              <span>Communicate with support</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Right Side - Login Form */}
-        <div className="login-form-container">
-
-          <div className="login-form">
-
-            <h2>Welcome Back 👋</h2>
-
-            <p className="login-subtitle">
-              Login to your student account
-            </p>
-
-            <label>Username</label>
-
-            <input
-              type="text"
-              placeholder="Enter your username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-
-            <label>Password</label>
-
-            <input
-              type="password"
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-
-            <button
-              className="login-button"
-              onClick={handleLogin}
-            >
-              Login
-            </button>
-
-            {message && (
-              <p className="login-message">
-                {message}
-              </p>
-            )}
-
-            <p className="register-text">
-              Don't have an account?{' '}
-              <Link to="/register">Create an account</Link>
-            </p>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-  );
+  return <div className="auth-page"><section className="auth-visual"><div className="auth-orb" /><div><img src="/studentdesk-logo.png" alt="StudentDesk" className="auth-logo login-logo" /><p className="eyebrow">CAMPUS SUPPORT, SIMPLIFIED</p><h1>Help is always<br />within reach.</h1><p>Submit requests, follow progress, and connect with campus support in one friendly space.</p><div className="auth-feature"><b>✓</b> Track every support request</div><div className="auth-feature"><b>✓</b> Stay updated in real time</div></div></section><section className="auth-form-side"><form className="auth-form" onSubmit={handleLogin}><Link className="mobile-brand" to="/"><img src="/studentdesk-logo.png" alt="StudentDesk" /> StudentDesk</Link><p className="eyebrow">WELCOME BACK</p><h2>Sign in to your desk</h2><p className="form-intro">Use your student account to continue.</p><label>Username<input required value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Enter your username" /></label><label>Password<input required type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter your password" /></label>{message && <p className="form-message error">{message}</p>}<button className="button button-primary button-wide" disabled={loading}>{loading ? 'Signing in…' : 'Sign in'}</button><p className="auth-switch">New to StudentDesk? <Link to="/register">Create an account</Link></p></form></section></div>;
 }
-
 export default Login;
-
