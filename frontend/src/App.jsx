@@ -8,7 +8,7 @@ import SplashScreen from './pages/SplashScreen';
 import TicketDetail from './pages/TicketDetail';
 import Tickets from './pages/Tickets';
 
-const API_URL = 'http://127.0.0.1:8000/api';
+const API_URL = 'https://student-help-desk-2.onrender.com/api';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(() => !!localStorage.getItem('token'));
