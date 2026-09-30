@@ -1,6 +1,6 @@
 import { useState } from 'react';
-
 import { Link, useNavigate } from 'react-router-dom';
+import { register as registerRequest } from '../api/auth';
 
 function Register() {
   const [form, setForm] = useState({ username: '', email: '', password: '' });
@@ -8,8 +8,7 @@ function Register() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const update = (key) => (event) =>
-    setForm({ ...form, [key]: event.target.value });
+  const update = (key) => (event) => setForm({ ...form, [key]: event.target.value });
 
   const handleRegister = async (event) => {
     event.preventDefault();
@@ -17,24 +16,7 @@ function Register() {
     setMessage('');
 
     try {
-      const response = await fetch(
-        'https://student-help-desk-2.onrender.com/api/register/',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(form),
-        }
-      );
-
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(
-          `Registration failed: ${Object.values(data).flat().join(' ')}`
-        );
-      }
-
+      await registerRequest(form);
       navigate('/login');
     } catch (error) {
       setMessage(error.message || 'Error connecting to server.');
@@ -47,43 +29,21 @@ function Register() {
     <div className="auth-page">
       <section className="auth-visual">
         <div className="auth-orb" />
-
         <div>
-          <img
-            src="/studentdesk-logo.png"
-            alt="StudentDesk"
-            className="auth-logo"
-          />
-
+          <img src="/studentdesk-logo.svg" alt="StudentDesk" className="auth-logo" />
           <p className="eyebrow">STUDENTDESK PORTAL</p>
-
-          <h1>
-            Your support
-            <br />
-            starts here.
-          </h1>
-
-          <p>
-            Create an account to reach Central IT and academic support whenever
-            you need it.
-          </p>
+          <h1>Your support<br />starts here.</h1>
+          <p>Create an account to reach Central IT and academic support whenever you need it.</p>
         </div>
       </section>
-
       <section className="auth-form-side">
         <form className="auth-form" onSubmit={handleRegister}>
           <Link className="mobile-brand" to="/">
-            <img src="/studentdesk-logo.png" alt="StudentDesk" /> StudentDesk
+            <img src="/studentdesk-logo.svg" alt="StudentDesk" /> StudentDesk
           </Link>
-
           <p className="eyebrow">CREATE ACCOUNT</p>
-
           <h2>Join StudentDesk</h2>
-
-          <p className="form-intro">
-            Your campus help desk in one place.
-          </p>
-
+          <p className="form-intro">Your campus help desk in one place.</p>
           <label>
             Username
             <input
@@ -93,7 +53,6 @@ function Register() {
               placeholder="Choose a username"
             />
           </label>
-
           <label>
             University email
             <input
@@ -104,7 +63,6 @@ function Register() {
               placeholder="you@university.edu"
             />
           </label>
-
           <label>
             Password
             <input
@@ -115,16 +73,10 @@ function Register() {
               placeholder="Create a password"
             />
           </label>
-
           {message && <p className="form-message error">{message}</p>}
-
-          <button
-            className="button button-primary button-wide"
-            disabled={loading}
-          >
+          <button className="button button-primary button-wide" disabled={loading}>
             {loading ? 'Creating account…' : 'Create account'}
           </button>
-
           <p className="auth-switch">
             Already have an account? <Link to="/login">Sign in</Link>
           </p>
@@ -135,4 +87,3 @@ function Register() {
 }
 
 export default Register;
-

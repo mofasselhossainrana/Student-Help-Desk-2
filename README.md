@@ -4,6 +4,16 @@ A full-stack help desk application built from scratch (PostgreSQL + Django REST 
 
 ---
 
+## Current Project Documentation
+
+- AI agent guide: [`AGENTS.md`](AGENTS.md)
+- Documentation index: [`docs/README.md`](docs/README.md)
+- Production review, completed changes, and next direction: [`docs/REPO_PRODUCTION_REVIEW.md`](docs/REPO_PRODUCTION_REVIEW.md)
+- Project context and API map: [`docs/PROJECT_CONTEXT.md`](docs/PROJECT_CONTEXT.md)
+- Backend setup and deployment: [`backend/README.md`](backend/README.md)
+
+---
+
 ## Phase 1: Database Design (PostgreSQL / pgAdmin)
 
 Designed and built the initial schema manually in pgAdmin to learn relational database fundamentals.

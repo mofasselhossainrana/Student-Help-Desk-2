@@ -1,7 +1,12 @@
-import Sidebar from './sidebar';
+import Sidebar from './Sidebar';
 
 function AppLayout({ children, onLogout }) {
-  return <div className="app-shell"><Sidebar onLogout={onLogout} /><main className="app-main">{children}</main></div>;
+  return (
+    <div className="app-shell">
+      <Sidebar onLogout={onLogout} />
+      <main className="app-main">{children}</main>
+    </div>
+  );
 }
 
 export default AppLayout;
