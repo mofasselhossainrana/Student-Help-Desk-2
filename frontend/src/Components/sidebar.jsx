@@ -18,7 +18,7 @@ function Sidebar({ onLogout }) {
   return (
     <aside className="sidebar">
       <NavLink className="brand" to="/dashboard" aria-label="StudentDesk dashboard">
-        <img src="/studentdesk-logo.svg" alt="StudentDesk" />
+        <img src="/studentdesk-logo.png" alt="StudentDesk" />
         <span>
           <strong>StudentDesk</strong>
           <small>Mini Help Desk</small>

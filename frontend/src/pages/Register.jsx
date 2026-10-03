@@ -30,7 +30,7 @@ function Register() {
       <section className="auth-visual">
         <div className="auth-orb" />
         <div>
-          <img src="/studentdesk-logo.svg" alt="StudentDesk" className="auth-logo" />
+          <img src="/studentdesk-logo.png" alt="StudentDesk" className="auth-logo" />
           <p className="eyebrow">STUDENTDESK PORTAL</p>
           <h1>Your support<br />starts here.</h1>
           <p>Create an account to reach Central IT and academic support whenever you need it.</p>
@@ -39,7 +39,7 @@ function Register() {
       <section className="auth-form-side">
         <form className="auth-form" onSubmit={handleRegister}>
           <Link className="mobile-brand" to="/">
-            <img src="/studentdesk-logo.svg" alt="StudentDesk" /> StudentDesk
+            <img src="/studentdesk-logo.png" alt="StudentDesk" /> StudentDesk
           </Link>
           <p className="eyebrow">CREATE ACCOUNT</p>
           <h2>Join StudentDesk</h2>

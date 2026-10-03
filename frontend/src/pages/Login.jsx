@@ -32,7 +32,7 @@ function Login() {
       <section className="auth-visual">
         <div className="auth-orb" />
         <div>
-          <img src="/studentdesk-logo.svg" alt="StudentDesk" className="auth-logo login-logo" />
+          <img src="/studentdesk-logo.png" alt="StudentDesk" className="auth-logo login-logo" />
           <p className="eyebrow">CAMPUS SUPPORT, SIMPLIFIED</p>
           <h1>Help is always<br />within reach.</h1>
           <p>Submit requests, follow progress, and connect with campus support in one friendly space.</p>
@@ -43,7 +43,7 @@ function Login() {
       <section className="auth-form-side">
         <form className="auth-form" onSubmit={handleLogin}>
           <Link className="mobile-brand" to="/">
-            <img src="/studentdesk-logo.svg" alt="StudentDesk" /> StudentDesk
+            <img src="/studentdesk-logo.png" alt="StudentDesk" /> StudentDesk
           </Link>
           <p className="eyebrow">WELCOME BACK</p>
           <h2>Sign in to your desk</h2>

@@ -20,7 +20,7 @@ function SplashScreen({ isLoggedIn }) {
       <span className="version">v1.0</span>
       <div className="splash-card">
         <div className="splash-logo">
-          <img src="/studentdesk-logo.svg" alt="StudentDesk" />
+          <img src="/studentdesk-logo.png" alt="StudentDesk" />
           <i>✓</i>
         </div>
         <p className="eyebrow">Mini Help Desk <b>•</b> সমাধান</p>
